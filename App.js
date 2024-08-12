@@ -78,3 +78,5 @@ const App = () => {
 };
 
 export default App;
+
+// 대충 커밋 잘 먹는지 확인해봄
