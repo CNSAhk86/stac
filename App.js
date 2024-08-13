@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { initializeApp } from '@firebase/app';
-import { getAuth, onAuthStateChanged } from '@firebase/auth';
+import { getAuth, onAuthStateChanged, initializeAuth, getReactNativePersistence } from '@firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import SignInScreen from './lib/SignInScreen';
 import SignUpScreen from './lib/SignUpScreen';
@@ -21,13 +22,17 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+
+// Initialize Firebase Auth with AsyncStorage for persistence
+const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(AsyncStorage)
+});
+
 const Stack = createNativeStackNavigator();
 
 const App = () => {
   const [user, setUser] = useState(null);
   const [isWaiting, setIsWaiting] = useState(false);
-
-  const auth = getAuth(app);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -78,5 +83,3 @@ const App = () => {
 };
 
 export default App;
-
-// 데브 수정도 잘 되는지 확인해보자
