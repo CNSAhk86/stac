@@ -22,8 +22,7 @@ const ProfileScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>User Profile</Text>
-      <Text>{user ? user.email : 'No user logged in'}</Text>
+      <Text style={styles.title}>{user ? user.email : 'No user logged in'}님, 반갑습니다!</Text>
       <Button title="Logout" onPress={handleLogout} />
       <Button title="Go Back" onPress={handleGoBack} />
     </View>
