@@ -3,7 +3,7 @@
     "name": "front",
     "slug": "front",
     "version": "1.0.0",
-    "scheme": "front",
+    "scheme": "com.dev_hana.front",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -13,16 +13,23 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.devhana.front"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.dev_hana.front"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "39e5428b-1d24-4881-916a-f02ebbc3a509"
+      }
     }
   }
 }

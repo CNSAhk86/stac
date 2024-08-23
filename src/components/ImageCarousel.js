@@ -8,7 +8,10 @@ const ImageCarousel = ({ images }) => {
         <View key={index} style={styles.imageCard}>
           <Image source={item.uri} style={styles.image} />
           <View style={styles.overlay} />
-          <Text style={styles.imageText}>{item.label}</Text>
+          <View style={styles.textContainer}>
+            <Text style={styles.catchphraseText}>{item.catchphrase}</Text>
+            <Text style={styles.locationText}>{item.location}</Text>
+          </View>
         </View>
       ))}
     </ScrollView>
@@ -22,34 +25,41 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   imageCard: {
-    width: 195,
+    width: 240,
     height: 250,
     marginRight: 15,
     borderRadius: 10,
     overflow: 'hidden',
     backgroundColor: '#fff',
     elevation: 3,
-    position: 'relative', // Needed for overlay
+    position: 'relative', // 오버레이를 위해 필요
   },
   image: {
     width: '100%',
     height: '100%',
-    borderRadius: 10, // Make sure the image is also rounded
+    borderRadius: 10, // 이미지도 둥글게
   },
   overlay: {
-    ...StyleSheet.absoluteFillObject, // Fill the entire view with the overlay
-    backgroundColor: 'rgba(0, 0, 0, 0.4)', // Adjust the opacity for the dark effect
-    borderRadius: 10, // Keep the overlay rounded
+    ...StyleSheet.absoluteFillObject, // 오버레이가 전체를 덮도록 설정
+    backgroundColor: 'rgba(0, 0, 0, 0.4)', // 어두운 효과를 위한 배경색 설정
+    borderRadius: 10, // 오버레이도 둥글게
   },
-  imageText: {
+  textContainer: {
     position: 'absolute',
     bottom: 10,
     left: 10,
-    right: 0,
-    textAlign: 'left',
+    right: 10,
+  },
+  catchphraseText: {
+    fontSize: 14,
     color: '#fff',
     fontWeight: 'bold',
-    paddingVertical: 5,
+  },
+  locationText: {
+    fontSize: 25,
+    color: '#fff',
+    fontWeight: '900',
+    marginTop: 5,
   },
 });
 

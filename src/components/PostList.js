@@ -9,6 +9,17 @@ const PostList = ({ posts }) => {
     return content;
   };
 
+  const getStatusStyle = (status) => {
+    switch (status) {
+      case '답변 대기 중':
+        return styles.statusPending;
+      case '답변 완료':
+        return styles.statusAnswered;
+      default:
+        return styles.statusDefault;
+    }
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.postContainer}>
       {posts.map((post, index) => (
@@ -16,6 +27,9 @@ const PostList = ({ posts }) => {
           <View style={styles.writerContainer}>
             <Image source={post.profileImage} style={styles.profileImage} />
             <Text style={styles.writerName}>{post.writer}</Text>
+            <View style={[styles.statusContainer, getStatusStyle(post.status)]}>
+              <Text style={styles.statusText}>{post.status}</Text>
+            </View>
           </View>
           <Text style={styles.postTitle}>{post.title}</Text>
           <Text style={styles.postContent}>
@@ -57,6 +71,32 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#333',
   },
+  statusContainer: {
+    marginLeft: 10,
+    paddingVertical: 2,
+    paddingHorizontal: 8,
+    borderRadius: 12,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  statusText: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  statusPending: {
+    backgroundColor: '#FFA500', // 주황색 배경
+    borderColor: '#FF8C00',
+  },
+  statusAnswered: {
+    backgroundColor: '#32CD32', // 초록색 배경
+    borderColor: '#31B404', // 어두운 초록색 테두리
+  },
+  statusDefault: {
+    backgroundColor: '#D3D3D3', // 기본 회색 배경
+    borderColor: '#A9A9A9', // 기본 회색 테두리
+  },
   postTitle: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -67,10 +107,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#555',
     lineHeight: 22,
-  },
-  moreText: {
-    color: '#0066cc',
-    fontWeight: 'bold',
   },
 });
 

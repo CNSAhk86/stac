@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "255268255127",
+    "project_id": "stac-c27d6",
+    "storage_bucket": "stac-c27d6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:255268255127:android:5bb053a3c5bbe6db4d40d2",
+        "android_client_info": {
+          "package_name": "com.dev_hana.front"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "255268255127-hip9rsv25s0rd09925qsh5ju1b3v6rv5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dev_hana.front",
+            "certificate_hash": "2ea99850ad1156e5b9a45a2760eed562999952f6"
+          }
+        },
+        {
+          "client_id": "255268255127-6dd0696ae4buo67o4jc9tomugfhgfkav.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLDlkNvf8PO_g4JXBRdwTwOAiXJWKhBiw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "255268255127-6dd0696ae4buo67o4jc9tomugfhgfkav.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
