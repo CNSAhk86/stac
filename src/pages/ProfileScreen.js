@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, SafeAreaView, ScrollView } from 'react-native';
 import { getAuth, signOut } from '@firebase/auth';
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -50,100 +50,102 @@ const ProfileScreen = ({ navigation }) => {
         </TouchableOpacity>
         <Text style={styles.navTitle}>프로필</Text>
       </View>
-      <View style={styles.container}>
-        <View style={styles.profileImageContainer}>
-          <Image source={require('../../assets/favicon.png')} style={styles.profileImage} />
-          <TouchableOpacity>
-            <Text style={styles.uploadText}>프로필 업로드</Text>
-          </TouchableOpacity>
-        </View>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.container}>
+          <View style={styles.profileImageContainer}>
+            <Image source={require('../../assets/favicon.png')} style={styles.profileImage} />
+            <TouchableOpacity>
+              <Text style={styles.uploadText}>프로필 업로드</Text>
+            </TouchableOpacity>
+          </View>
 
-        <View style={styles.fieldContainer}>
-          <Text style={styles.fieldLabel}>이름</Text>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={[styles.input, !isEditing.name && styles.disabledInput]}
-              value={name}
-              onChangeText={setName}
-              editable={isEditing.name}
-              placeholder="사용자 이름"
-            />
-            <TouchableOpacity onPress={() => handleEdit('name')}>
-              <MaterialIcons name="edit" size={20} color="#808080" />
+          <View style={styles.fieldContainer}>
+            <Text style={styles.fieldLabel}>이름</Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={[styles.input, !isEditing.name && styles.disabledInput]}
+                value={name}
+                onChangeText={setName}
+                editable={isEditing.name}
+                placeholder="사용자 이름"
+              />
+              <TouchableOpacity onPress={() => handleEdit('name')}>
+                <MaterialIcons name="edit" size={20} color="#808080" />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View style={styles.fieldContainer}>
+            <Text style={styles.fieldLabel}>별명</Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={[styles.input, !isEditing.nickname && styles.disabledInput]}
+                value={nickname}
+                onChangeText={setNickname}
+                editable={isEditing.nickname}
+                placeholder="별명"
+              />
+              <TouchableOpacity onPress={() => handleEdit('nickname')}>
+                <MaterialIcons name="edit" size={20} color="#808080" />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View style={styles.fieldContainer}>
+            <Text style={styles.fieldLabel}>메일</Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={[styles.input, !isEditing.email && styles.disabledInput]}
+                value={email}
+                onChangeText={setEmail}
+                editable={isEditing.email}
+                placeholder="이메일"
+              />
+              <TouchableOpacity onPress={() => handleEdit('email')}>
+                <MaterialIcons name="edit" size={20} color="#808080" />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View style={styles.fieldContainer}>
+            <Text style={styles.fieldLabel}>전화번호</Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={[styles.input, !isEditing.phone && styles.disabledInput]}
+                value={phone}
+                onChangeText={setPhone}
+                editable={isEditing.phone}
+                placeholder="전화번호"
+              />
+              <TouchableOpacity onPress={() => handleEdit('phone')}>
+                <MaterialIcons name="edit" size={20} color="#808080" />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View style={styles.fieldContainer}>
+            <Text style={styles.fieldLabel}>내 키워드</Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={[styles.input, !isEditing.keywords && styles.disabledInput]}
+                value={keywords}
+                onChangeText={setKeywords}
+                editable={isEditing.keywords}
+                placeholder="내 키워드"
+              />
+              <TouchableOpacity onPress={() => handleEdit('keywords')}>
+                <MaterialIcons name="edit" size={20} color="#808080" />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.button} onPress={handleLogout}>
+              <Text style={styles.buttonText}>로그아웃</Text>
             </TouchableOpacity>
           </View>
         </View>
-
-        <View style={styles.fieldContainer}>
-          <Text style={styles.fieldLabel}>별명</Text>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={[styles.input, !isEditing.nickname && styles.disabledInput]}
-              value={nickname}
-              onChangeText={setNickname}
-              editable={isEditing.nickname}
-              placeholder="별명"
-            />
-            <TouchableOpacity onPress={() => handleEdit('nickname')}>
-              <MaterialIcons name="edit" size={20} color="#808080" />
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        <View style={styles.fieldContainer}>
-          <Text style={styles.fieldLabel}>메일</Text>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={[styles.input, !isEditing.email && styles.disabledInput]}
-              value={email}
-              onChangeText={setEmail}
-              editable={isEditing.email}
-              placeholder="이메일"
-            />
-            <TouchableOpacity onPress={() => handleEdit('email')}>
-              <MaterialIcons name="edit" size={20} color="#808080" />
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        <View style={styles.fieldContainer}>
-          <Text style={styles.fieldLabel}>전화번호</Text>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={[styles.input, !isEditing.phone && styles.disabledInput]}
-              value={phone}
-              onChangeText={setPhone}
-              editable={isEditing.phone}
-              placeholder="전화번호"
-            />
-            <TouchableOpacity onPress={() => handleEdit('phone')}>
-              <MaterialIcons name="edit" size={20} color="#808080" />
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        <View style={styles.fieldContainer}>
-          <Text style={styles.fieldLabel}>내 키워드</Text>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={[styles.input, !isEditing.keywords && styles.disabledInput]}
-              value={keywords}
-              onChangeText={setKeywords}
-              editable={isEditing.keywords}
-              placeholder="내 키워드"
-            />
-            <TouchableOpacity onPress={() => handleEdit('keywords')}>
-              <MaterialIcons name="edit" size={20} color="#808080" />
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={handleLogout}>
-            <Text style={styles.buttonText}>로그아웃</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -172,9 +174,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#333',
   },
+  scrollContainer: {
+    paddingVertical: 20,
+  },
   container: {
-    flex: 1,
-    padding: 20,
+    paddingHorizontal: 20,
     backgroundColor: '#ffffff',
   },
   profileImageContainer: {
@@ -221,13 +225,14 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#333',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 35,
     borderRadius: 5,
+    marginBottom: 10,
   },
   buttonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 13,
     fontWeight: 'bold',
   },
 });

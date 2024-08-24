@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Image, Text, TouchableOpacity, StatusBar, SafeAreaView } from 'react-native';
 import * as Google from 'expo-auth-session/providers/google';
-import { getAuth, signInWithCredential, GoogleAuthProvider } from 'firebase/auth';
 import * as WebBrowser from 'expo-web-browser';
 
 WebBrowser.maybeCompleteAuthSession();
@@ -9,9 +8,11 @@ WebBrowser.maybeCompleteAuthSession();
 const SignInScreen = () => {
   const [loading, setLoading] = useState(false);
   
-  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    clientId: '255268255127-hip9rsv25s0rd09925qsh5ju1b3v6rv5.apps.googleusercontent.com',
-    useProxy: true
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId: '255268255127-a3uptqolr685lcajsijok8t90srf4iq9.apps.googleusercontent.com',
+    expoClientId: '255268255127-6dd0696ae4buo67o4jc9tomugfhgfkav.apps.googleusercontent.com',
+  },{
+    projectNameForProxy: "@dev_hana/front"
   });
 
   useEffect(() => {
@@ -19,9 +20,6 @@ const SignInScreen = () => {
       const { id_token } = response.params;
       const auth = getAuth();
       const credential = GoogleAuthProvider.credential(id_token);
-      signInWithCredential(auth, credential).catch((error) => {
-        console.error('Firebase sign-in failed: ', error);
-      });
     }
   }, [response]);
 

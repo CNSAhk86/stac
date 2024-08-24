@@ -117,10 +117,10 @@ const App = () => {
             },
             tabBarLabelStyle: {
               fontSize: 10,
-              paddingBottom: Platform.OS === 'ios' ? 0 : 0, // 텍스트의 아래쪽 여백을 최소화
+              paddingBottom: Platform.OS === 'ios' ? 0 : 5, 
             },
             tabBarIconStyle: {
-              marginBottom: -5, // 아이콘을 조금 더 아래로 내립니다.
+              marginBottom: -5
             },
             tabBarLabel: route.name === 'HomeTab' ? '홈 화면' :
                         route.name === 'PostTab' ? '게시글' :

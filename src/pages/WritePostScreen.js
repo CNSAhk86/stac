@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -35,93 +35,102 @@ const WritePostScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.navbar}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <MaterialIcons name="arrow-back" size={25} color="#333" />
-        </TouchableOpacity>
-        <Text style={styles.navTitle}>글 작성</Text>
-        <View style={styles.rightIcons}>
-        </View>
-      </View>
-
-      <ScrollView style={styles.scrollView}>
-        {/* 토픽 설정 UI */}
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>토픽 선택</Text>
-          <View style={styles.tagContainer}>
-            {tags.map((tag, index) => (
-              <TouchableOpacity
-                key={index}
-                style={[
-                  styles.tagButton,
-                  selectedTags.includes(tag) && styles.tagButtonSelected, // 선택된 태그 스타일 적용
-                ]}
-                onPress={() => handleTagPress(tag)}
-              >
-                <Text
-                  style={[
-                    styles.tagText,
-                    selectedTags.includes(tag) && styles.tagTextSelected, // 선택된 태그 텍스트 스타일 적용
-                  ]}
-                >
-                  {tag}
-                </Text>
-              </TouchableOpacity>
-            ))}
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <View style={styles.navbar}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <MaterialIcons name="arrow-back" size={25} color="#333" />
+          </TouchableOpacity>
+          <Text style={styles.navTitle}>글 작성</Text>
+          <View style={styles.rightIcons}>
           </View>
         </View>
 
-        {/* 이미지 업로드 UI */}
-        <View style={styles.imageUploadContainer}>
-          <Text style={styles.label}>이미지 업로드</Text>
-          <TouchableOpacity style={styles.imageUploadButton}>
-            <MaterialIcons name="photo-camera" size={24} color="#999" />
-            <Text style={styles.imageUploadText}>이미지 추가</Text>
-          </TouchableOpacity>
-        </View>
+        <ScrollView style={styles.scrollView}>
+          {/* 토픽 설정 UI */}
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>토픽 선택</Text>
+            <View style={styles.tagContainer}>
+              {tags.map((tag, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={[
+                    styles.tagButton,
+                    selectedTags.includes(tag) && styles.tagButtonSelected, // 선택된 태그 스타일 적용
+                  ]}
+                  onPress={() => handleTagPress(tag)}
+                >
+                  <Text
+                    style={[
+                      styles.tagText,
+                      selectedTags.includes(tag) && styles.tagTextSelected, // 선택된 태그 텍스트 스타일 적용
+                    ]}
+                  >
+                    {tag}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
 
-        {/* 제목 입력 UI */}
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>제목</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="제목을 입력하세요"
-            value={title}
-            onChangeText={setTitle}
-          />
-        </View>
+          {/* 이미지 업로드 UI */}
+          <View style={styles.imageUploadContainer}>
+            <Text style={styles.label}>이미지 업로드</Text>
+            <TouchableOpacity style={styles.imageUploadButton}>
+              <MaterialIcons name="photo-camera" size={24} color="#999" />
+              <Text style={styles.imageUploadText}>이미지 추가</Text>
+            </TouchableOpacity>
+          </View>
 
-        {/* 내용 작성 UI */}
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>내용</Text>
-          <TextInput
-            style={[styles.input, styles.textArea]}
-            placeholder="내용을 입력하세요"
-            value={content}
-            onChangeText={setContent}
-            multiline
-          />
-        </View>
+          {/* 제목 입력 UI */}
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>제목</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="제목을 입력하세요"
+              value={title}
+              onChangeText={setTitle}
+            />
+          </View>
 
-        {/* 위치 설정 UI */}
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>위치 설정</Text>
-          <TouchableOpacity style={styles.locationButton}>
-            <MaterialIcons name="location-on" size={24} color="#999" />
-            <Text style={styles.locationText}>현재 위치 설정</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+          {/* 내용 작성 UI */}
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>내용</Text>
+            <TextInput
+              style={[styles.input, styles.textArea]}
+              placeholder="내용을 입력하세요"
+              value={content}
+              onChangeText={setContent}
+              multiline
+            />
+          </View>
 
-      <TouchableOpacity style={styles.saveButton} onPress={handleSavePress}>
-        <Text style={styles.saveButtonText}>저장</Text>
-      </TouchableOpacity>
-    </View>
+          {/* 위치 설정 UI */}
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>위치 설정</Text>
+            <TouchableOpacity style={styles.locationButton}>
+              <MaterialIcons name="location-on" size={24} color="#999" />
+              <Text style={styles.locationText}>현재 위치 설정</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* 저장 버튼 UI */}
+          <View style={styles.inputContainer}>
+            <TouchableOpacity style={styles.saveButton} onPress={handleSavePress}>
+              <Text style={styles.saveButtonText}>저장</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#ffffff',
+  },
   container: {
     flex: 1,
     backgroundColor: '#ffffff',
@@ -151,7 +160,7 @@ const styles = StyleSheet.create({
   },
   profileIcon: {
     marginLeft: 20,
-    marginRight:0,
+    marginRight: 0,
   },
   scrollView: {
     flexGrow: 1,
@@ -232,40 +241,19 @@ const styles = StyleSheet.create({
     color: '#999',
   },
   saveButton: {
-    position: 'absolute',
-    bottom: 70,
-    right: 20,
     backgroundColor: '#333',
     borderRadius: 5,
     paddingVertical: 10,
     paddingHorizontal: 20,
-  },
+    alignItems: 'center',
+    alignSelf: 'flex-end',  // 버튼을 우측 정렬
+    marginTop: 2,
+},
+
   saveButtonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: 'bold',
-  },
-  bottomNav: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 60,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    borderTopWidth: 1,
-    borderTopColor: '#ddd',
-    backgroundColor: '#fff',
-  },
-  navItem: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  navText: {
-    fontSize: 10,
-    color: '#333',
   },
 });
 
