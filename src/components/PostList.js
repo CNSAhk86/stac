@@ -3,8 +3,8 @@ import { View, Text, ScrollView, StyleSheet, Image } from 'react-native';
 
 const PostList = ({ posts }) => {
   const truncateContent = (content) => {
-    if (content.length > 50) {
-      return `${content.substring(0, 30)}... 더보기`;
+    if (content.length > 15) {
+      return `${content.substring(0, 15)}... 더보기`;
     }
     return content;
   };

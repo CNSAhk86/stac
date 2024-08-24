@@ -16,6 +16,7 @@ const PostScreen = () => {
   ];
 
   const handleProfilePress = () => {
+    // PostScreen의 스택 내에서 ProfileScreen으로 이동
     navigation.navigate('Profile');
   };
 
@@ -107,14 +108,15 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: '#ffffff',
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    justifyContent: 'space-between', // 양 끝으로 배치
     paddingHorizontal: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 }, // 아래쪽 그림자만 남기도록 설정
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
     elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    zIndex: 1000,
   },
   navTitle: {
     fontSize: 18,
@@ -184,28 +186,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 4,
-  },
-  bottomNav: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 60,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    borderTopWidth: 1,
-    borderTopColor: '#ddd',
-    backgroundColor: '#fff',
-  },
-  navItem: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  navText: {
-    fontSize: 10,
-    color: '#333',
   },
 });
 

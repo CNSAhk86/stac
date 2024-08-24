@@ -17,7 +17,7 @@ const HomeScreen = () => {
     {
       image: require('../../assets/banner/banner1.png'),
       title: '오늘의 건강 소식',
-      subtitle: '가장 맛있는 것, 사실 가장 건강에 좋은 것?', // 소제목
+      subtitle: '가장 맛있는 것, 사실 가장 건강에 좋은 것?',
       buttonLabel: '살펴보기',
       onPress: () => {
         navigation.navigate('Explore');
@@ -97,7 +97,7 @@ const HomeScreen = () => {
 
   const handleProfilePress = () => {
     navigation.navigate('Profile');
-  };
+  };  
 
   const handleNotificationPress = () => {
     navigation.navigate('Notifications');
@@ -229,7 +229,6 @@ const HomeScreen = () => {
 
             <View style={styles.hr} />
 
-            {/* Render second PostList with reItems */}
             <TouchableOpacity onPress={() => handleBoardPress('답변 대기 중')} style={styles.postHeader}>
               <View style={styles.headerTitleContainer}>
                 <Text style={styles.postsTitle}>당신을 기다리는 게시글 🗂️</Text>
@@ -347,7 +346,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     elevation: 4,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 }, // 아래쪽에만 그림자가 적용되도록 설정
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
     zIndex: 1000,
