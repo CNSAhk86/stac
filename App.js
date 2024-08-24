@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { initializeApp, getApps } from 'firebase/app';
 import { getAuth, onAuthStateChanged, initializeAuth, getReactNativePersistence } from 'firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, Platform, SafeAreaView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 import SignInScreen from './src/pages/SignInScreen';
@@ -74,7 +74,11 @@ const App = () => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (authUser) => {
-      setUser(authUser);
+      if (authUser) {
+        setUser(authUser);
+      } else {
+        setUser(null);
+      }
       setLoading(false);
     });
 
@@ -91,7 +95,7 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      {user ? (
+      <SafeAreaView style={{ flex: 1 }}>
         <Tab.Navigator
           screenOptions={({ route }) => ({
             tabBarIcon: ({ color, size }) => {
@@ -104,19 +108,19 @@ const App = () => {
               } else if (route.name === 'ChatTab') {
                 iconName = 'chat';
               } else if (route.name === 'Travel') {
-                iconName = 'explore'; // Icon for travel
+                iconName = 'explore';
               } else if (route.name === 'MyPageTab') {
                 iconName = 'person';
               }
 
-              return <MaterialIcons name={iconName} size={25} color={color} />;
+              return <MaterialIcons name={iconName} size={size} color={color} />;
             },
             tabBarLabelStyle: {
-              marginTop: 3,
-              fontSize: 9,
+              fontSize: 10,
+              paddingBottom: Platform.OS === 'ios' ? 0 : 0, // 텍스트의 아래쪽 여백을 최소화
             },
             tabBarIconStyle: {
-              marginBottom: -5,
+              marginBottom: -5, // 아이콘을 조금 더 아래로 내립니다.
             },
             tabBarLabel: route.name === 'HomeTab' ? '홈 화면' :
                         route.name === 'PostTab' ? '게시글' :
@@ -125,8 +129,8 @@ const App = () => {
             tabBarActiveTintColor: '#333',
             tabBarInactiveTintColor: '#808080',
             tabBarStyle: {
-              height: 60,
-              paddingVertical: 5,
+              height: Platform.OS === 'ios' ? 50 : 50, // 메뉴바의 높이를 줄임
+              paddingVertical: 0,
               borderTopWidth: 1,
               borderTopColor: '#ddd',
               backgroundColor: '#fff',
@@ -139,11 +143,7 @@ const App = () => {
           <Tab.Screen name="ChatTab" component={ChatScreen} options={{ headerShown: false }} />
           <Tab.Screen name="MyPageTab" component={MyPageStack} options={{ headerShown: false }} />
         </Tab.Navigator>
-      ) : (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="SignIn" component={SignInScreen} />
-        </Stack.Navigator>
-      )}
+      </SafeAreaView>
     </NavigationContainer>
   );
 };
