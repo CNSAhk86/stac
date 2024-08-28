@@ -1,10 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { getAuth } from '@firebase/auth';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/database';
 
 const MyPageScreen = () => {
   const navigation = useNavigation();
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  const [name, setName] = useState('');
+  const [nickname, setNickname] = useState('');
+
+  useEffect(() => {
+    if (user) {
+      const profileRef = firebase.database().ref(`profiles/${user.uid}`);
+      profileRef.once('value').then(snapshot => {
+        if (snapshot.exists()) {
+          const userProfile = snapshot.val();
+          setName(userProfile.name || '');
+          setNickname(userProfile.nickname || '');
+        }
+      });
+    }
+  }, [user]);
 
   const handleProfilePress = () => {
     navigation.navigate('Profile');
@@ -27,6 +48,10 @@ const MyPageScreen = () => {
             source={require('../../assets/favicon.png')}
             style={styles.profileImage}
           />
+          <View style={styles.profileInfoContainer}>
+            <Text style={styles.profileName}>{name}</Text>
+            <Text style={styles.profileNickname}>{nickname}</Text>
+          </View>
           <TouchableOpacity onPress={handleProfilePress} style={styles.profileButton}>
             <Text style={styles.profileButtonText}>프로필 보기</Text>
           </TouchableOpacity>
@@ -119,8 +144,20 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-        borderWidth: 0.5,
+    borderWidth: 0.5,
     borderColor: '#C0C0C0',
+  },
+  profileInfoContainer: {
+    flex: 1,
+    marginLeft: 15,
+  },
+  profileName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  profileNickname: {
+    fontSize: 14,
+    color: '#808080',
   },
   profileButton: {
     backgroundColor: '#333',
@@ -141,7 +178,7 @@ const styles = StyleSheet.create({
   },
   sectionContainer: {
     paddingHorizontal: 15,
-    marginBottom: 20, // 크레딧 섹션과 아래 섹션들 간의 간격을 넓혔습니다
+    marginBottom: 20,
   },
   sectionTitle: {
     marginTop: 20,
@@ -192,18 +229,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   activityContainer: {
-    marginHorizontal: 15, // 좌우 여백 추가
+    marginHorizontal: 15,
   },
   activityItem: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 15, // 상하 패딩을 추가하여 간격을 넓힘
+    paddingVertical: 15,
   },
   activityTitle: {
     fontSize: 16,
     fontWeight: '300',
-    marginLeft: 5, // 아이콘과 텍스트 사이의 간격을 최소화
+    marginLeft: 5,
   },
 });
 

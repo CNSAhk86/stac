@@ -1,17 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, SafeAreaView, ScrollView } from 'react-native';
 import { getAuth, signOut } from '@firebase/auth';
 import { MaterialIcons } from '@expo/vector-icons';
+import { ProfileContext } from '../contexts/ProfileContext';  // 경로에 맞게 수정
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/database';  // Realtime Database
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 const ProfileScreen = ({ navigation }) => {
   const auth = getAuth();
   const user = auth.currentUser;
 
-  const [name, setName] = useState(user ? user.displayName || '사용자 이름' : '');
-  const [nickname, setNickname] = useState('별명');
+  const { profile, setProfile, loading } = useContext(ProfileContext);  // 프로필 데이터 가져오기
+
+  const [name, setName] = useState(profile.name || '');
+  const [nickname, setNickname] = useState(profile.nickname || '');
   const [email, setEmail] = useState(user ? user.email : '');
-  const [phone, setPhone] = useState('010-0000-0000');
-  const [keywords, setKeywords] = useState('내 키워드');
+  const [phone, setPhone] = useState(profile.phone || '');
+  const [keywords, setKeywords] = useState(profile.keywords || '');
 
   const [isEditing, setIsEditing] = useState({
     name: false,
@@ -20,6 +26,22 @@ const ProfileScreen = ({ navigation }) => {
     phone: false,
     keywords: false,
   });
+
+  useEffect(() => {
+    if (user) {
+      const profileRef = firebase.database().ref(`profiles/${user.uid}`);
+      profileRef.once('value').then(snapshot => {
+        if (snapshot.exists()) {
+          const userProfile = snapshot.val();
+          setProfile(userProfile);  // Context에 프로필 업데이트
+          setName(userProfile.name || '');
+          setNickname(userProfile.nickname || '');
+          setPhone(userProfile.phone || '');
+          setKeywords(userProfile.keywords || '');
+        }
+      });
+    }
+  }, [user]);
 
   const handleEdit = (field) => {
     setIsEditing((prevState) => ({
@@ -31,7 +53,7 @@ const ProfileScreen = ({ navigation }) => {
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
-        navigation.replace('SignIn');
+        navigation.navigate('SignInScreen');
       })
       .catch((error) => {
         console.error('Logout failed: ', error);
@@ -52,98 +74,136 @@ const ProfileScreen = ({ navigation }) => {
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.container}>
-          <View style={styles.profileImageContainer}>
-            <Image source={require('../../assets/favicon.png')} style={styles.profileImage} />
-            <TouchableOpacity>
-              <Text style={styles.uploadText}>프로필 업로드</Text>
-            </TouchableOpacity>
-          </View>
+          {loading ? (
+            // 스켈레톤 UI 렌더링
+            <SkeletonPlaceholder>
+              <View style={styles.profileImageContainer}>
+                <View style={styles.skeletonProfileImage} />
+                <View style={styles.skeletonText} />
+              </View>
+              <View style={styles.skeletonFieldContainer}>
+                <View style={styles.skeletonText} />
+                <View style={styles.skeletonInput} />
+              </View>
+              <View style={styles.skeletonFieldContainer}>
+                <View style={styles.skeletonText} />
+                <View style={styles.skeletonInput} />
+              </View>
+              <View style={styles.skeletonFieldContainer}>
+                <View style={styles.skeletonText} />
+                <View style={styles.skeletonInput} />
+              </View>
+              <View style={styles.skeletonFieldContainer}>
+                <View style={styles.skeletonText} />
+                <View style={styles.skeletonInput} />
+              </View>
+              <View style={styles.skeletonFieldContainer}>
+                <View style={styles.skeletonText} />
+                <View style={styles.skeletonInput} />
+              </View>
+            </SkeletonPlaceholder>
+          ) : (
+            // 실제 프로필 UI 렌더링
+            <>
+              <View style={styles.profileImageContainer}>
+                <Image source={require('../../assets/favicon.png')} style={styles.profileImage} />
+                <TouchableOpacity>
+                  <Text style={styles.uploadText}>프로필 업로드</Text>
+                </TouchableOpacity>
+              </View>
 
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>이름</Text>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={[styles.input, !isEditing.name && styles.disabledInput]}
-                value={name}
-                onChangeText={setName}
-                editable={isEditing.name}
-                placeholder="사용자 이름"
-              />
-              <TouchableOpacity onPress={() => handleEdit('name')}>
-                <MaterialIcons name="edit" size={20} color="#808080" />
-              </TouchableOpacity>
-            </View>
-          </View>
+              <View style={styles.fieldContainer}>
+                <Text style={styles.fieldLabel}>이름</Text>
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    style={[styles.input, !isEditing.name && styles.disabledInput]}
+                    value={name}
+                    onChangeText={setName}
+                    editable={isEditing.name}
+                    placeholder="사용자 이름"
+                  />
+                  <TouchableOpacity onPress={() => handleEdit('name')}>
+                    <MaterialIcons name="edit" size={20} color="#808080" />
+                  </TouchableOpacity>
+                </View>
+              </View>
 
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>별명</Text>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={[styles.input, !isEditing.nickname && styles.disabledInput]}
-                value={nickname}
-                onChangeText={setNickname}
-                editable={isEditing.nickname}
-                placeholder="별명"
-              />
-              <TouchableOpacity onPress={() => handleEdit('nickname')}>
-                <MaterialIcons name="edit" size={20} color="#808080" />
-              </TouchableOpacity>
-            </View>
-          </View>
+              <View style={styles.fieldContainer}>
+                <Text style={styles.fieldLabel}>별명</Text>
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    style={[styles.input, !isEditing.nickname && styles.disabledInput]}
+                    value={nickname}
+                    onChangeText={setNickname}
+                    editable={isEditing.nickname}
+                    placeholder="별명"
+                  />
+                  <TouchableOpacity onPress={() => handleEdit('nickname')}>
+                    <MaterialIcons name="edit" size={20} color="#808080" />
+                  </TouchableOpacity>
+                </View>
+              </View>
 
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>메일</Text>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={[styles.input, !isEditing.email && styles.disabledInput]}
-                value={email}
-                onChangeText={setEmail}
-                editable={isEditing.email}
-                placeholder="이메일"
-              />
-              <TouchableOpacity onPress={() => handleEdit('email')}>
-                <MaterialIcons name="edit" size={20} color="#808080" />
-              </TouchableOpacity>
-            </View>
-          </View>
+              <View style={styles.fieldContainer}>
+                <Text style={styles.fieldLabel}>메일</Text>
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    style={[styles.input, !isEditing.email && styles.disabledInput]}
+                    value={email}
+                    onChangeText={setEmail}
+                    editable={isEditing.email}
+                    placeholder="이메일"
+                  />
+                  <TouchableOpacity onPress={() => handleEdit('email')}>
+                    <MaterialIcons name="edit" size={20} color="#808080" />
+                  </TouchableOpacity>
+                </View>
+              </View>
 
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>전화번호</Text>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={[styles.input, !isEditing.phone && styles.disabledInput]}
-                value={phone}
-                onChangeText={setPhone}
-                editable={isEditing.phone}
-                placeholder="전화번호"
-              />
-              <TouchableOpacity onPress={() => handleEdit('phone')}>
-                <MaterialIcons name="edit" size={20} color="#808080" />
-              </TouchableOpacity>
-            </View>
-          </View>
+              <View style={styles.fieldContainer}>
+                <Text style={styles.fieldLabel}>전화번호</Text>
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    style={[styles.input, !isEditing.phone && styles.disabledInput]}
+                    value={phone}
+                    onChangeText={(text) => {
+                      const formattedText = text.replace(/[^0-9]/g, '')
+                        .replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+                      setPhone(formattedText);
+                    }}
+                    editable={isEditing.phone}
+                    placeholder="전화번호"
+                    keyboardType="phone-pad"
+                  />
+                  <TouchableOpacity onPress={() => handleEdit('phone')}>
+                    <MaterialIcons name="edit" size={20} color="#808080" />
+                  </TouchableOpacity>
+                </View>
+              </View>
 
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>내 키워드</Text>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={[styles.input, !isEditing.keywords && styles.disabledInput]}
-                value={keywords}
-                onChangeText={setKeywords}
-                editable={isEditing.keywords}
-                placeholder="내 키워드"
-              />
-              <TouchableOpacity onPress={() => handleEdit('keywords')}>
-                <MaterialIcons name="edit" size={20} color="#808080" />
-              </TouchableOpacity>
-            </View>
-          </View>
+              <View style={styles.fieldContainer}>
+                <Text style={styles.fieldLabel}>내 키워드</Text>
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    style={[styles.input, !isEditing.keywords && styles.disabledInput]}
+                    value={keywords}
+                    onChangeText={setKeywords}
+                    editable={isEditing.keywords}
+                    placeholder="내 키워드"
+                  />
+                  <TouchableOpacity onPress={() => handleEdit('keywords')}>
+                    <MaterialIcons name="edit" size={20} color="#808080" />
+                  </TouchableOpacity>
+                </View>
+              </View>
 
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={handleLogout}>
-              <Text style={styles.buttonText}>로그아웃</Text>
-            </TouchableOpacity>
-          </View>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.button} onPress={handleLogout}>
+                  <Text style={styles.buttonText}>로그아웃</Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -234,6 +294,26 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 13,
     fontWeight: 'bold',
+  },
+  skeletonProfileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 10,
+  },
+  skeletonText: {
+    width: '60%',
+    height: 20,
+    borderRadius: 4,
+    marginBottom: 10,
+  },
+  skeletonFieldContainer: {
+    marginBottom: 25,
+  },
+  skeletonInput: {
+    width: '100%',
+    height: 20,
+    borderRadius: 4,
   },
 });
 
