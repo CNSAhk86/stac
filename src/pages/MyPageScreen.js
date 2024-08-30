@@ -157,6 +157,7 @@ const styles = StyleSheet.create({
   },
   profileNickname: {
     fontSize: 14,
+    marginTop: 5,
     color: '#808080',
   },
   profileButton: {

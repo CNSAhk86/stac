@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, ActivityIndicator, Platform, SafeAreaView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { CommonActions } from '@react-navigation/native';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/database'; // Realtime Database 추가
@@ -22,6 +23,7 @@ import InitialProfileSetupScreen from './src/pages/InitialProfileSetupScreen';
 
 // Context for managing profile
 import { ProfileProvider } from './src/contexts/ProfileContext';
+import TravelDetailScreen from './src/pages/TravelDetailScreen';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -50,6 +52,7 @@ const HomeStack = () => (
     <Stack.Screen name="PostScreen" component={PostScreen} />
     <Stack.Screen name="Travel" component={TravelScreen} />
     <Stack.Screen name="SignInScreen" component={SignInScreen} />
+    <Stack.Screen name="TravelDetail" component={TravelDetailScreen} />
   </Stack.Navigator>
 );
 
@@ -66,6 +69,15 @@ const MyPageStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="MyPage" component={MyPageScreen} />
     <Stack.Screen name="Profile" component={ProfileScreen} />
+    <Stack.Screen name="SignInScreen" component={SignInScreen} />
+  </Stack.Navigator>
+);
+
+const TravelStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="TravelScreen" component={TravelScreen} />
+    <Stack.Screen name="Profile" component={ProfileScreen} />
+    <Stack.Screen name="TravelDetail" component={TravelDetailScreen} />
     <Stack.Screen name="SignInScreen" component={SignInScreen} />
   </Stack.Navigator>
 );
@@ -114,7 +126,7 @@ const MainTabs = () => (
   >
     <Tab.Screen name="HomeTab" component={HomeStack} options={{ headerShown: false }} />
     <Tab.Screen name="PostTab" component={PostStack} options={{ headerShown: false }} />
-    <Tab.Screen name="TravelTab" component={TravelScreen} options={{ headerShown: false }} />
+    <Tab.Screen name="TravelTab" component={TravelStack} options={{ headerShown: false }} />
     <Tab.Screen name="ChatTab" component={ChatScreen} options={{ headerShown: false }} />
     <Tab.Screen name="MyPageTab" component={MyPageStack} options={{ headerShown: false }} />
   </Tab.Navigator>

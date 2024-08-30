@@ -1,18 +1,27 @@
 import React from 'react';
-import { View, Text, Image, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, Image, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-const ImageCarousel = ({ images }) => {
+const ImageCarousel = ({ images, travelData }) => {
+  const navigation = useNavigation();
+
+  const handleImagePress = (index) => {
+    // travelData에서 해당 인덱스의 데이터를 가져와 TravelDetail로 전달
+    const selectedTravel = travelData[index];
+    navigation.navigate('TravelDetail', { travel: selectedTravel });
+  };
+
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.imageScroll}>
       {images.map((item, index) => (
-        <View key={index} style={styles.imageCard}>
+        <TouchableOpacity key={index} onPress={() => handleImagePress(index)} style={styles.imageCard}>
           <Image source={item.uri} style={styles.image} />
           <View style={styles.overlay} />
           <View style={styles.textContainer}>
             <Text style={styles.catchphraseText}>{item.catchphrase}</Text>
             <Text style={styles.locationText}>{item.location}</Text>
           </View>
-        </View>
+        </TouchableOpacity>
       ))}
     </ScrollView>
   );

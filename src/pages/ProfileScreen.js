@@ -120,7 +120,7 @@ const ProfileScreen = ({ navigation }) => {
                     value={name}
                     onChangeText={setName}
                     editable={isEditing.name}
-                    placeholder="사용자 이름"
+                    placeholder="로딩 중.."
                   />
                   <TouchableOpacity onPress={() => handleEdit('name')}>
                     <MaterialIcons name="edit" size={20} color="#808080" />
@@ -136,7 +136,7 @@ const ProfileScreen = ({ navigation }) => {
                     value={nickname}
                     onChangeText={setNickname}
                     editable={isEditing.nickname}
-                    placeholder="별명"
+                    placeholder="로딩 중.."
                   />
                   <TouchableOpacity onPress={() => handleEdit('nickname')}>
                     <MaterialIcons name="edit" size={20} color="#808080" />
@@ -152,7 +152,7 @@ const ProfileScreen = ({ navigation }) => {
                     value={email}
                     onChangeText={setEmail}
                     editable={isEditing.email}
-                    placeholder="이메일"
+                    placeholder="로딩 중.."
                   />
                   <TouchableOpacity onPress={() => handleEdit('email')}>
                     <MaterialIcons name="edit" size={20} color="#808080" />
@@ -172,7 +172,7 @@ const ProfileScreen = ({ navigation }) => {
                       setPhone(formattedText);
                     }}
                     editable={isEditing.phone}
-                    placeholder="전화번호"
+                    placeholder="로딩 중.."
                     keyboardType="phone-pad"
                   />
                   <TouchableOpacity onPress={() => handleEdit('phone')}>
@@ -189,7 +189,7 @@ const ProfileScreen = ({ navigation }) => {
                     value={keywords}
                     onChangeText={setKeywords}
                     editable={isEditing.keywords}
-                    placeholder="내 키워드"
+                    placeholder="로딩 중.."
                   />
                   <TouchableOpacity onPress={() => handleEdit('keywords')}>
                     <MaterialIcons name="edit" size={20} color="#808080" />

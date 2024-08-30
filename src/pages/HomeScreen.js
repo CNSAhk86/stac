@@ -53,6 +53,51 @@ const HomeScreen = () => {
     { uri: require('../../assets/img/image7.png'), catchphrase: '맛있는게 걸어갈 때마다 나오는', location: '부산 먹거리 골목' },
   ];
 
+  const travelData = [
+    {
+      destination: '부산 해운대',
+      status: '매칭 대기 중',
+      dateTime: '2024-09-01 09:00',
+      location: '부산 어딘가',
+    },
+    {
+      destination: '전주 한옥마을',
+      status: '매칭 완료',
+      dateTime: '2024-09-05 13:00',
+      location: '전주 어딘가',
+    },
+    {
+      destination: '온양 민속촌',
+      status: '취소됨',
+      dateTime: '2024-09-11 08:00',
+      location: '온양 어딘가',
+    },
+    {
+      destination: '경복궁',
+      status: '취소됨',
+      dateTime: '2024-09-12 08:00',
+      location: '서울 어딘가',
+    },
+    {
+      destination: '덕수궁',
+      status: '취소됨',
+      dateTime: '2024-09-14 08:00',
+      location: '서울 어딘가',
+    },
+    {
+      destination: '서울역 광장',
+      status: '취소됨',
+      dateTime: '2024-09-17 08:00',
+      location: '서울역 어딘가',
+    },
+    {
+      destination: '부산 먹거리 골목',
+      status: '취소됨',
+      dateTime: '2024-09-20 08:00',
+      location: '부산 어딘가',
+    },
+];
+
   const posts = [
     {
       title: '청년 개발자 분들 질문좀여',
@@ -108,7 +153,7 @@ const HomeScreen = () => {
   };
 
   const handleTravelPress = () => {
-    navigation.navigate('TravelCourses');
+    navigation.navigate('Travel');
   };
 
   const handleBoardPress = (category) => {
@@ -211,7 +256,8 @@ const HomeScreen = () => {
               </View>
             </TouchableOpacity>
 
-            <ImageCarousel images={images} />
+            <ImageCarousel images={images} travelData={travelData} />
+
 
             {/* Horizontal line (hr) */}
             <View style={styles.hr} />

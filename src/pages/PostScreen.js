@@ -12,7 +12,41 @@ const PostScreen = () => {
   const categories = ['전체', '인기', '답변 대기 중', '답변 완료'];
 
   const posts = [
-    // 예시 게시글 데이터
+    {
+      title: '청년 개발자 분들 질문좀여',
+      writer: '시니어',
+      content: '님들 연봉 어케됨? 저는 시니어라 존나 버는데 님들은 아직도 쥐꼬리 월급받고 사시나요?ㅋㅋㅋㅋ',
+      profileImage: require('../../assets/favicon.png'),
+      status: '답변 대기 중'
+    },
+    {
+      title: '약간 그지같은데',
+      writer: '디자이너가 싫은 개발자',
+      content: '아니 요즘은 디자인도 프론트엔드에서 다 하나봄. 피그마는 장식인가 진짜 빡치네요 ㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠ',
+      profileImage: require('../../assets/favicon.png'),
+      status: '답변 완료'
+    },
+    {
+      title: '싱글벙글 혼자하는 개발 근황',
+      writer: '충삼이',
+      content: '개같이 정신줄을 놓아버림 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅌㅌㅌㅌㅌㅌㅌㅌㅌㅌㄴㄴㄴㄴㄴㄴ',
+      profileImage: require('../../assets/favicon.png'),
+      status: '답변 대기 중'
+    },{
+      title: '리액트 네이티브 초보입니다',
+      writer: '초보개발자',
+      content: '리액트 네이티브에서 상태 관리 어떻게 하면 좋을까요? 여러가지 패턴들이 있던데... 고민입니다.',
+      profileImage: require('../../assets/favicon.png'),
+      status: '답변 대기 중'
+    },
+    {
+      title: '디버깅이 어려워요',
+      writer: '초보개발자',
+      content: '리액트 네이티브에서 디버깅할 때 콘솔로그 외에 다른 방법이 있을까요?',
+      profileImage: require('../../assets/favicon.png'),
+      status: '답변 대기 중'
+
+    },
   ];
 
   const handleProfilePress = () => {
@@ -98,7 +132,7 @@ const PostScreen = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#ffffff', // SafeAreaView 배경색 설정
+    backgroundColor: '#ffffff',
   },
   container: {
     flex: 1,
@@ -121,8 +155,8 @@ const styles = StyleSheet.create({
   navTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    position: 'absolute', // 가운데에 고정
-    left: 50, // 텍스트를 화면 중앙으로 유지하도록 설정 (좌측 여백으로 조절)
+    position: 'absolute',
+    left: 50,
   },
   rightIcons: {
     flexDirection: 'row',
@@ -134,7 +168,7 @@ const styles = StyleSheet.create({
   },
   notificationIcon: {
     marginLeft: 10,
-    marginRight: 5, // 노티피케이션 아이콘의 여백
+    marginRight: 5,
   },
   scrollView: {
     flexGrow: 1,
@@ -155,7 +189,7 @@ const styles = StyleSheet.create({
   },
   categoryContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    alignItems: 'flex-start', // 좌측 정렬을 위해 추가
     marginVertical: 10,
     paddingHorizontal: 10,
   },
@@ -164,16 +198,17 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     backgroundColor: '#e0e0e0',
     borderRadius: 20,
+    marginRight: 10, // 버튼 간 간격 추가
   },
   selectedCategoryButton: {
-    backgroundColor: '#333', // 선택된 카테고리 버튼의 배경색을 검은색으로 변경
+    backgroundColor: '#333',
   },
   categoryText: {
     fontSize: 14,
     color: '#333',
   },
   selectedCategoryText: {
-    color: '#fff', // 선택된 카테고리의 텍스트를 흰색으로 변경
+    color: '#fff',
   },
   floatingButton: {
     position: 'absolute',
