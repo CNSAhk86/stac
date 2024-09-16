@@ -64,7 +64,7 @@ const HomeScreen = () => {
     {
       uri: require('../../assets/img/image2.png'),
       destination: '전주 한옥마을',
-      status: '매칭 완료',
+      status: '마감됨',
       dateTime: '2024-09-05 13:00',
       location: '전주 어딘가',
     },

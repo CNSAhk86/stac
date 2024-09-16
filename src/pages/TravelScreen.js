@@ -15,7 +15,7 @@ const TravelScreen = () => {
     {
       uri: require('../../assets/img/image1.png'),
       catchphrase: '에메랄드 빛 바다가 아름다운 곳',
-      location: '부산 해운대',
+      location: '부산 어딘가',
       destination: '부산 해운대',
       status: '매칭 대기 중',
       dateTime: '2024-09-01 09:00',
@@ -26,13 +26,15 @@ const TravelScreen = () => {
     {
       uri: require('../../assets/img/image2.png'),
       destination: '전주 한옥마을',
-      status: '매칭 완료',
+      catchphrase: '옛 거리의 풍속',
+      status: '마감됨',
       dateTime: '2024-09-05 13:00',
       location: '전주 어딘가',
     },
     {
       uri: require('../../assets/img/image3.png'),
       destination: '온양 민속촌',
+      catchphrase: '민족의 얼이 살아 숨쉬는',
       status: '취소됨',
       dateTime: '2024-09-11 08:00',
       location: '온양 어딘가',
@@ -40,6 +42,7 @@ const TravelScreen = () => {
     {
       uri: require('../../assets/img/image4.png'),
       destination: '경복궁',
+      catchphrase: '상징과도 같은 관광지',
       status: '취소됨',
       dateTime: '2024-09-12 08:00',
       location: '서울 어딘가',
@@ -47,6 +50,7 @@ const TravelScreen = () => {
     {
       uri: require('../../assets/img/image5.png'),
       destination: '덕수궁',
+      catchphrase: '무구한 역사와 전통의',
       status: '취소됨',
       dateTime: '2024-09-14 08:00',
       location: '서울 어딘가',
@@ -54,6 +58,7 @@ const TravelScreen = () => {
     {
       uri: require('../../assets/img/image6.png'),
       destination: '서울역 광장',
+      catchphrase: '추억이 깃든',
       status: '취소됨',
       dateTime: '2024-09-17 08:00',
       location: '서울역 어딘가',
@@ -62,6 +67,7 @@ const TravelScreen = () => {
       uri: require('../../assets/img/image7.png'),
       destination: '부산 먹거리 골목',
       status: '취소됨',
+      catchphrase: '맛있는게 걸어갈 때마다 나오는',
       dateTime: '2024-09-20 08:00',
       location: '부산 어딘가',
     },

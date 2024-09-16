@@ -13,17 +13,24 @@ const MyPageScreen = () => {
 
   const [name, setName] = useState('');
   const [nickname, setNickname] = useState('');
+  const [credit, setCredit] = useState(null); // 크레딧 상태 추가 (null로 초기화)
 
   useEffect(() => {
     if (user) {
       const profileRef = firebase.database().ref(`profiles/${user.uid}`);
-      profileRef.once('value').then(snapshot => {
+
+      // 실시간 데이터 리스너 설정
+      profileRef.on('value', (snapshot) => {
         if (snapshot.exists()) {
           const userProfile = snapshot.val();
           setName(userProfile.name || '');
           setNickname(userProfile.nickname || '');
+          setCredit(userProfile.credit || 0); // 크레딧 정보 가져오기
         }
       });
+
+      // 컴포넌트가 언마운트될 때 리스너 제거
+      return () => profileRef.off();
     }
   }, [user]);
 
@@ -66,9 +73,11 @@ const MyPageScreen = () => {
           <View style={styles.creditBox}>
             <View style={styles.creditContainer}>
               <View style={styles.creditInfo}>
-                <MaterialIcons name="monetization-on" size={24} color="yellow" />
+                {/* 주황색 크레딧 아이콘 */}
+                <MaterialIcons name="monetization-on" size={24} color="#FFA500" />
                 <Text style={styles.creditText}>내 크레딧</Text>
-                <Text style={styles.creditSubText}>크레딧을 확인해봐요!</Text>
+                {/* 크레딧 값이 null/undefined가 아닌 경우에만 표시 */}
+                <Text style={styles.creditSubText}>{credit !== null ? credit : '---'} 크레딧 보유 중</Text>
               </View>
               <MaterialIcons name="chevron-right" size={24} color="#808080" />
             </View>

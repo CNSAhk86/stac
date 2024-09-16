@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -20,18 +20,18 @@ import MyPageScreen from './src/pages/MyPageScreen';
 import TravelScreen from './src/pages/TravelScreen';
 import InitialProfileSetupScreen from './src/pages/InitialProfileSetupScreen';
 import TravelDetailScreen from './src/pages/TravelDetailScreen';
-
+import TermsAgreementScreen from './src/pages/TermsAgreementScreen';  // 약관 동의 화면 import
 import { ProfileProvider } from './src/contexts/ProfileContext';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAlnN8JjUTs817c0aDP08D6Rjbe9DXSPwo",
-  authDomain: "stac-c27d6.firebaseapp.com",
-  databaseURL: "https://stac-c27d6-default-rtdb.firebaseio.com",
-  projectId: "stac-c27d6",
-  storageBucket: "stac-c27d6.appspot.com",
-  messagingSenderId: "255268255127",
-  appId: "1:255268255127:web:8768901ee3368c3c4d40d2",
-  measurementId: "G-V9M2T6R7XB"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  databaseURL: "YOUR_DATABASE_URL",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID",
+  measurementId: "YOUR_MEASUREMENT_ID",
 };
 
 if (!firebase.apps.length) {
@@ -41,6 +41,7 @@ if (!firebase.apps.length) {
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
+// Stack navigators for different sections of the app
 const HomeStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="Home" component={HomeScreen} />
@@ -65,78 +66,108 @@ const MyPageStack = () => (
   </Stack.Navigator>
 );
 
-const TravelStack = () => (
-  <Stack.Navigator screenOptions={{ headerShown: false }}>
-    <Stack.Screen name="TravelScreen" component={TravelScreen} />
-    <Stack.Screen
-      name="TravelDetail"
-      component={TravelDetailScreen}
-      options={{
-        tabBarVisible: false,
-        safeAreaInsets: { top: 0, bottom: 0 },
-        presentation: 'modal',
-      }}
-    />
-    <Stack.Screen name="SignInScreen" component={SignInScreen} />
-  </Stack.Navigator>
-);
+import { useLayoutEffect } from 'react';
+
+const TravelStack = ({ navigation }) => {
+  useLayoutEffect(() => {
+    const parentNavigator = navigation.getParent();
+
+    return navigation.addListener('state', (e) => {
+      const currentRoute = e.data.state.routes[e.data.state.index].name;
+
+      if (currentRoute === 'TermsAgreement') {
+        // Hide the bottom tab bar
+        parentNavigator?.setOptions({ tabBarStyle: { display: 'none' } });
+      } else {
+        // Show the bottom tab bar
+        parentNavigator?.setOptions({ tabBarStyle: { display: 'flex' } });
+      }
+    });
+  }, [navigation]);
+
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="TravelScreen" component={TravelScreen} />
+      <Stack.Screen
+        name="TravelDetail"
+        component={TravelDetailScreen}
+        options={{
+          presentation: 'modal',  // 모달 스타일 적용
+          gestureEnabled: true,   // 스와이프 제스처 활성화
+          gestureDirection: 'vertical',  // 스와이프 제스처 방향 설정
+        }}
+      />
+      <Stack.Screen 
+        name="TermsAgreement" 
+        component={TermsAgreementScreen} 
+      />
+      <Stack.Screen name="SignInScreen" component={SignInScreen} />
+    </Stack.Navigator>
+  );
+};
 
 
-const MainTabs = () => (
-  <Tab.Navigator
-    screenOptions={({ route }) => ({
-      tabBarIcon: ({ color, size }) => {
-        let iconName;
+// Main tabs
+const MainTabs = () => {
+  const routeNameRef = useRef();
+  const navigationRef = useRef();
 
-        if (route.name === 'HomeTab') {
-          iconName = 'home';
-        } else if (route.name === 'PostTab') {
-          iconName = 'forum';
-        } else if (route.name === 'ChatTab') {
-          iconName = 'chat';
-        } else if (route.name === 'TravelTab') {
-          iconName = 'explore';
-        } else if (route.name === 'MyPageTab') {
-          iconName = 'person';
-        }
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color, size }) => {
+          let iconName;
 
-        return <MaterialIcons name={iconName} size={size} color={color} />;
-      },
-      tabBarLabelStyle: {
-        fontSize: 10,
-        paddingBottom: Platform.OS === 'ios' ? 0 : 5,
-      },
-      tabBarIconStyle: {
-        marginBottom: -5,
-      },
-      tabBarLabel: route.name === 'HomeTab' ? '홈 화면' :
-                  route.name === 'PostTab' ? '게시글' :
-                  route.name === 'ChatTab' ? '대화' :
-                  route.name === 'TravelTab' ? '여행' : '마이페이지',
-      tabBarActiveTintColor: '#333',
-      tabBarInactiveTintColor: '#808080',
-      tabBarStyle: {
-        height: Platform.OS === 'ios' ? 50 : 50,
-        paddingVertical: 0,
-        borderTopWidth: 1,
-        borderTopColor: '#ddd',
-        backgroundColor: '#fff',
-      },
-    })}
-  >
-    <Tab.Screen name="HomeTab" component={HomeStack} options={{ headerShown: false }} />
-    <Tab.Screen name="PostTab" component={PostStack} options={{ headerShown: false }} />
-    <Tab.Screen
-      name="TravelTab"
-      component={TravelStack}
-      options={{ headerShown: false }}
-    />
-    <Tab.Screen name="ChatTab" component={ChatScreen} options={{ headerShown: false }} />
-    <Tab.Screen name="MyPageTab" component={MyPageStack} options={{ headerShown: false }} />
-  </Tab.Navigator>
-);
+          if (route.name === 'HomeTab') {
+            iconName = 'home';
+          } else if (route.name === 'PostTab') {
+            iconName = 'forum';
+          } else if (route.name === 'ChatTab') {
+            iconName = 'chat';
+          } else if (route.name === 'TravelTab') {
+            iconName = 'explore';
+          } else if (route.name === 'MyPageTab') {
+            iconName = 'person';
+          }
 
+          return <MaterialIcons name={iconName} size={size} color={color} />;
+        },
+        tabBarLabelStyle: {
+          fontSize: 10,
+          paddingBottom: Platform.OS === 'ios' ? 0 : 5,
+        },
+        tabBarIconStyle: {
+          marginBottom: -5,
+        },
+        tabBarLabel: route.name === 'HomeTab' ? '홈 화면' :
+                    route.name === 'PostTab' ? '게시글' :
+                    route.name === 'ChatTab' ? '대화' :
+                    route.name === 'TravelTab' ? '여행' : '마이페이지',
+        tabBarActiveTintColor: '#333',
+        tabBarInactiveTintColor: '#808080',
+        tabBarStyle: {
+          height: Platform.OS === 'ios' ? 50 : 50,
+          paddingVertical: 0,
+          borderTopWidth: 1,
+          borderTopColor: '#ddd',
+          backgroundColor: '#fff',
+        },
+      })}
+    >
+      <Tab.Screen name="HomeTab" component={HomeStack} options={{ headerShown: false }} />
+      <Tab.Screen name="PostTab" component={PostStack} options={{ headerShown: false }} />
+      <Tab.Screen
+        name="TravelTab"
+        component={TravelStack}
+        options={{ headerShown: false }}
+      />
+      <Tab.Screen name="ChatTab" component={ChatScreen} options={{ headerShown: false }} />
+      <Tab.Screen name="MyPageTab" component={MyPageStack} options={{ headerShown: false }} />
+    </Tab.Navigator>
+  );
+};
 
+// Main app entry point
 const App = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);

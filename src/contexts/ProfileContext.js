@@ -11,6 +11,7 @@ export const ProfileProvider = ({ children }) => {
     nickname: '',
     phone: '',
     keywords: '',
+    credit: 300,  // 기본 크레딧 값을 300으로 설정
   });
   const [loading, setLoading] = useState(true);
 
@@ -40,8 +41,12 @@ export const ProfileProvider = ({ children }) => {
 
     if (user) {
       const profileRef = firebase.database().ref(`profiles/${user.uid}`);
-      await profileRef.set(newProfile);
-      setProfile(newProfile);
+      
+      // 새로운 프로필 저장 시 credit 필드가 없으면 기본값 300을 추가
+      const updatedProfile = { ...newProfile, credit: newProfile.credit || 300 };
+      
+      await profileRef.set(updatedProfile);
+      setProfile(updatedProfile);
     }
   };
 

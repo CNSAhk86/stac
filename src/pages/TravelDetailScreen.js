@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, ImageBackground, Animated } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, Animated, TouchableOpacity } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons'; // 아이콘 사용
 
-const TravelDetailScreen = () => {
+const TravelDetailScreen = ({ navigation }) => {
   const route = useRoute();
   const { travel } = route.params;
 
@@ -32,6 +32,17 @@ const TravelDetailScreen = () => {
     outputRange: ['#A4A4A4', '#BDBDBD']
   });
 
+  const handleApply = () => {
+    navigation.replace('TermsAgreement', {
+      destination: travel.destination,  // 여행지
+      location: travel.location,        // 집합 장소
+      date: travel.dateTime,            // 날짜
+    });
+  };
+  
+
+  const isButtonDisabled = travel.status !== '매칭 대기 중';
+
   return (
     <View style={styles.container}>
       {/* 배경 이미지 */}
@@ -43,17 +54,18 @@ const TravelDetailScreen = () => {
         {/* 어두운 오버레이 */}
         <View style={styles.darkOverlay} pointerEvents="none" />
 
-        <View style={styles.topMessage}>
-          {/* 애니메이션 그라데이션 텍스트 */}
-          <Animated.Text style={[styles.slideDownText, { color: animatedGradient }]}>
-            닫으시려면 아래로 내려주세요
-          </Animated.Text>
-        </View>
+        {/* 상단 닫기 버튼 */}
+        <TouchableOpacity
+          style={styles.closeButton}  // 닫기 버튼 스타일 추가
+          onPress={() => navigation.goBack()}  // 모달 닫기 동작
+        >
+          <MaterialIcons name="close" size={30} color="white" />
+        </TouchableOpacity>
 
         {/* Catchphrase와 Location을 상단에 배치 */}
         <View style={styles.overlay}>
           <Text style={styles.catchphraseText}>{travel.catchphrase}</Text>
-          <Text style={styles.locationTextLarge}>{travel.location}</Text>
+          <Text style={styles.locationTextLarge}>{travel.destination}</Text>
         </View>
       </ImageBackground>
   
@@ -79,9 +91,18 @@ const TravelDetailScreen = () => {
           <Text style={styles.descriptionText}>대충 코스 관련 내용이나 뭐 여행 관련 설명 추가하면 될 듯</Text>
   
           {/* 신청 버튼 */}
-          <View style={styles.button}>
-            <Text style={styles.buttonText}>200 크레딧으로 신청하기</Text>
-          </View>
+          <TouchableOpacity
+            style={[
+              styles.button,
+              isButtonDisabled && styles.buttonDisabled, // 버튼 비활성화 시 스타일 적용
+            ]}
+            disabled={isButtonDisabled} // 버튼 비활성화 여부
+            onPress={handleApply}  // 버튼 클릭 시 로직
+          >
+            <Text style={styles.buttonText}>
+              {isButtonDisabled ? '지금은 신청할 수 없습니다' : '200 크레딧으로 신청하기'}
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -110,30 +131,17 @@ const styles = StyleSheet.create({
     bottom: 0,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-  topMessage: {
-    position: 'absolute',
-    top: 10, // 살짝 아래로 이동
-    left: 0,
-    right: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  slideDownText: {
-    fontSize: 12, // 작고 얇은 글씨체
-    fontWeight: '400',
-    textAlign: 'center',
-  },
   overlay: {
     position: 'absolute',
-    top: 60, // 위치 조정
+    top: 60,
     left: 20,
     right: 20,
   },
   catchphraseText: {
     color: 'white',
     fontSize: 15,
-    fontWeight: '700', // 얇은 글씨체
-    textAlign: 'left', // 좌측 정렬
+    fontWeight: '700',
+    textAlign: 'left',
   },
   locationTextLarge: {
     color: 'white',
@@ -193,6 +201,15 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  buttonDisabled: {
+    backgroundColor: '#888', // 비활성화된 버튼 스타일
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    zIndex: 1,
   },
 });
 

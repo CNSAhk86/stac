@@ -9,7 +9,7 @@ const TravelList = ({ travels = [] }) => {
     switch (status) {
       case '매칭 대기 중':
         return styles.statusPending;
-      case '매칭 완료':
+      case '마감됨':
         return styles.statusMatched;
       case '취소됨':
         return styles.statusCancelled;
