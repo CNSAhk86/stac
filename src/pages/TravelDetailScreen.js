@@ -1,187 +1,193 @@
-import React from 'react';
-import { View, Text, ScrollView, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { MaterialIcons } from '@expo/vector-icons';
-import { WebView } from 'react-native-webview';
+import React, { useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, ImageBackground, Animated } from 'react-native';
+import { useRoute } from '@react-navigation/native';
+import { MaterialIcons } from '@expo/vector-icons'; // 아이콘 사용
 
 const TravelDetailScreen = () => {
-  const navigation = useNavigation();
   const route = useRoute();
   const { travel } = route.params;
 
-  const handleProfilePress = () => {
-    navigation.navigate('Profile');
-  };
+  const gradientAnimation = useRef(new Animated.Value(0)).current;
 
-  const handleNotificationPress = () => {
-    navigation.navigate('Notifications');
-  };
+  useEffect(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(gradientAnimation, {
+          toValue: 1,
+          duration: 2000,
+          useNativeDriver: false,
+        }),
+        Animated.timing(gradientAnimation, {
+          toValue: 0,
+          duration: 2000,
+          useNativeDriver: false,
+        })
+      ])
+    ).start();
+  }, [gradientAnimation]);
 
-  // Google Maps iframe HTML 코드
-  const mapHtml = `
-    <iframe 
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d52163.24127019322!2d129.16387580000003!3d35.20142265!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x35688d9fdaeda715%3A0x21c4cd40510865a5!2z67aA7IKw6rSR7Jet7IucIO2VtOyatOuMgOq1rA!5e0!3m2!1sko!2skr!4v1725275789449!5m2!1sko!2skr" 
-      width="100%" 
-      height="100%" 
-      style="border:0;" 
-      allowfullscreen="" 
-      loading="lazy" 
-      referrerpolicy="no-referrer-when-downgrade">
-    </iframe>
-  `;
+  // 애니메이션을 통해 그라데이션 효과 구현
+  const animatedGradient = gradientAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['#A4A4A4', '#BDBDBD']
+  });
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        {/* 헤더 바 */}
-        <View style={styles.navbar}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <MaterialIcons name="arrow-back" size={25} color="#333" />
-          </TouchableOpacity>
-          <Text style={styles.navTitle}>여행 상세 정보</Text>
-          <View style={styles.rightIcons}>
-            <TouchableOpacity onPress={handleProfilePress} style={styles.profileIcon}>
-              <MaterialIcons name="account-circle" size={25} color="#808080" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleNotificationPress} style={styles.notificationIcon}>
-              <MaterialIcons name="notifications" size={25} color="#808080" />
-            </TouchableOpacity>
-          </View>
+    <View style={styles.container}>
+      {/* 배경 이미지 */}
+      <ImageBackground
+        source={travel.uri}
+        style={styles.imageBackground}
+        resizeMode="cover"
+      >
+        {/* 어두운 오버레이 */}
+        <View style={styles.darkOverlay} pointerEvents="none" />
+
+        <View style={styles.topMessage}>
+          {/* 애니메이션 그라데이션 텍스트 */}
+          <Animated.Text style={[styles.slideDownText, { color: animatedGradient }]}>
+            닫으시려면 아래로 내려주세요
+          </Animated.Text>
         </View>
 
-        <ScrollView contentContainerStyle={styles.scrollViewContent}>
-          {/* 여행지 제목 */}
+        {/* Catchphrase와 Location을 상단에 배치 */}
+        <View style={styles.overlay}>
+          <Text style={styles.catchphraseText}>{travel.catchphrase}</Text>
+          <Text style={styles.locationTextLarge}>{travel.location}</Text>
+        </View>
+      </ImageBackground>
+  
+      {/* 고정된 텍스트 카드 */}
+      <View style={styles.fixedCard}>
+        <View style={styles.detailCard}>
+          {/* 여행지 제목 및 기본 정보 */}
           <Text style={styles.destinationTitle}>{travel.destination}</Text>
-
-          {/* Google Maps Iframe */}
-          {travel.destination === '부산 해운대' && (
-            <View style={styles.mapContainer}>
-              <WebView
-                originWhitelist={['*']}
-                source={{ html: mapHtml }}
-                style={styles.map}
-              />
-            </View>
-          )}
-
-          {/* 여행 정보 */}
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>일시</Text>
+          <View style={styles.row}>
+            <MaterialIcons name="location-on" size={20} color="#333" />
+            <Text style={styles.locationText}>{travel.location}</Text>
+          </View>
+          <View style={styles.row}>
+            <MaterialIcons name="calendar-today" size={20} color="#333" />
             <Text style={styles.detailText}>{travel.dateTime}</Text>
           </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>집합 장소</Text>
-            <Text style={styles.detailText}>{travel.location}</Text>
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>상태</Text>
+          <View style={styles.row}>
+            <MaterialIcons name="info" size={20} color="#333" />
             <Text style={styles.detailText}>{travel.status}</Text>
           </View>
-
-          {/* 기타 안내 */}
-          <Text style={styles.noteText}>* 기타 식비는 개인 부담입니다.</Text>
-
+  
+          {/* 설명 */}
+          <Text style={styles.descriptionText}>대충 코스 관련 내용이나 뭐 여행 관련 설명 추가하면 될 듯</Text>
+  
           {/* 신청 버튼 */}
-          <TouchableOpacity style={styles.button}>
+          <View style={styles.button}>
             <Text style={styles.buttonText}>200 크레딧으로 신청하기</Text>
-          </TouchableOpacity>
-        </ScrollView>
+          </View>
+        </View>
       </View>
-    </SafeAreaView>
-  );
+    </View>
+  );  
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#ffffff',
-  },
   container: {
     flex: 1,
     backgroundColor: '#ffffff',
   },
-  navbar: {
-    height: 50,
-    backgroundColor: '#ffffff',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  imageBackground: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  darkOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  topMessage: {
+    position: 'absolute',
+    top: 10, // 살짝 아래로 이동
+    left: 0,
+    right: 0,
+    justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 15,
-    elevation: 4,
+  },
+  slideDownText: {
+    fontSize: 12, // 작고 얇은 글씨체
+    fontWeight: '400',
+    textAlign: 'center',
+  },
+  overlay: {
+    position: 'absolute',
+    top: 60, // 위치 조정
+    left: 20,
+    right: 20,
+  },
+  catchphraseText: {
+    color: 'white',
+    fontSize: 15,
+    fontWeight: '700', // 얇은 글씨체
+    textAlign: 'left', // 좌측 정렬
+  },
+  locationTextLarge: {
+    color: 'white',
+    fontSize: 50,
+    fontWeight: '700',
+    textAlign: 'left',
+    marginTop: 5,
+  },
+  fixedCard: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    paddingHorizontal: 20,
+    paddingBottom: 30,
+  },
+  detailCard: {
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 15,
+    padding: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 2,
-    zIndex: 1000,
-  },
-  navTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    position: 'absolute',
-    left: 50,
-  },
-  rightIcons: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  profileIcon: {
-    marginLeft: 15,
-    marginRight: 0,
-  },
-  notificationIcon: {
-    marginLeft: 10,
-    marginRight: 5,
-  },
-  scrollViewContent: {
-    padding: 15,
+    shadowRadius: 4,
   },
   destinationTitle: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: 10,
   },
-  mapContainer: {
-    borderRadius: 10,
-    overflow: 'hidden',
-    marginBottom: 20,
-    height: 300, // WebView height
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
   },
-  map: {
-    width: '100%',
-    height: '100%',
-  },
-  inputContainer: {
-    marginVertical: 10,
-  },
-  label: {
+  locationText: {
     fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 5,
+    color: '#666',
+    marginLeft: 5,
   },
   detailText: {
     fontSize: 16,
-    color: '#333',
-    padding: 10,
-    backgroundColor: '#f9f9f9',
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#ddd',
+    color: '#666',
+    marginLeft: 5,
   },
-  noteText: {
-    fontSize: 12,
-    color: 'red',
-    marginTop: 20,
-    textAlign: 'center',
+  descriptionText: {
+    fontSize: 14,
+    color: '#666',
+    marginVertical: 20,
   },
   button: {
     backgroundColor: '#000',
-    paddingVertical: 14,
+    paddingVertical: 15,
     borderRadius: 7,
     alignItems: 'center',
-    marginTop: 30,
   },
   buttonText: {
     color: '#fff',

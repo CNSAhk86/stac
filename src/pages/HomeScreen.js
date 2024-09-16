@@ -55,42 +55,49 @@ const HomeScreen = () => {
 
   const travelData = [
     {
+      uri: require('../../assets/img/image1.png'),
       destination: '부산 해운대',
       status: '매칭 대기 중',
       dateTime: '2024-09-01 09:00',
       location: '부산 어딘가',
     },
     {
+      uri: require('../../assets/img/image2.png'),
       destination: '전주 한옥마을',
       status: '매칭 완료',
       dateTime: '2024-09-05 13:00',
       location: '전주 어딘가',
     },
     {
+      uri: require('../../assets/img/image3.png'),
       destination: '온양 민속촌',
       status: '취소됨',
       dateTime: '2024-09-11 08:00',
       location: '온양 어딘가',
     },
     {
+      uri: require('../../assets/img/image4.png'),
       destination: '경복궁',
       status: '취소됨',
       dateTime: '2024-09-12 08:00',
       location: '서울 어딘가',
     },
     {
+      uri: require('../../assets/img/image5.png'),
       destination: '덕수궁',
       status: '취소됨',
       dateTime: '2024-09-14 08:00',
       location: '서울 어딘가',
     },
     {
+      uri: require('../../assets/img/image6.png'),
       destination: '서울역 광장',
       status: '취소됨',
       dateTime: '2024-09-17 08:00',
       location: '서울역 어딘가',
     },
     {
+      uri: require('../../assets/img/image7.png'),
       destination: '부산 먹거리 골목',
       status: '취소됨',
       dateTime: '2024-09-20 08:00',
@@ -141,8 +148,11 @@ const HomeScreen = () => {
   ];
 
   const handleProfilePress = () => {
-    navigation.navigate('Profile');
+    navigation.navigate('MyPageTab', {
+      screen: 'MypageScreen'
+    });
   };  
+  
 
   const handleNotificationPress = () => {
     navigation.navigate('Notifications');
@@ -153,12 +163,18 @@ const HomeScreen = () => {
   };
 
   const handleTravelPress = () => {
-    navigation.navigate('Travel');
+    navigation.navigate('TravelTab', {
+      screen: 'TravelScreen'
+    });
   };
 
   const handleBoardPress = (category) => {
-    navigation.navigate('PostScreen', { initialCategory: category });
+    navigation.navigate('PostTab', {
+      screen: 'PostScreen',
+      params: { initialCategory: category }
+    });
   };
+  
 
   useEffect(() => {
     const interval = setInterval(() => {

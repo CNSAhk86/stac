@@ -6,10 +6,15 @@ const ImageCarousel = ({ images, travelData }) => {
   const navigation = useNavigation();
 
   const handleImagePress = (index) => {
-    // travelData에서 해당 인덱스의 데이터를 가져와 TravelDetail로 전달
     const selectedTravel = travelData[index];
-    navigation.navigate('TravelDetail', { travel: selectedTravel });
+  
+    // TravelDetail로 바로 이동
+    navigation.navigate('TravelTab', {
+      screen: 'TravelDetail',
+      params: { travel: selectedTravel },
+    });
   };
+  
 
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.imageScroll}>

@@ -18,13 +18,17 @@ const TravelList = ({ travels = [] }) => {
     }
   };
 
+  const handlePress = (travel) => {
+    navigation.navigate('TravelDetail', { travel });
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.travelContainer}>
       {travels.map((travel, index) => (
         <TouchableOpacity
           key={index}
           style={styles.travelCard}
-          onPress={() => navigation.navigate('TravelDetail', { travel })}
+          onPress={() => handlePress(travel)}
         >
           <View style={styles.destinationContainer}>
             <Text style={styles.destinationName}>{travel.destination}</Text>
@@ -81,20 +85,20 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   statusPending: {
-    backgroundColor: '#FFBF00', // 노란색 배경
+    backgroundColor: '#FFBF00',
     borderColor: '#FFC107',
   },
   statusMatched: {
-    backgroundColor: '#00BFFF', // 하늘색 배경
+    backgroundColor: '#00BFFF',
     borderColor: '#58ACFA',
   },
   statusCancelled: {
-    backgroundColor: '#FF6347', // 빨간색 배경
-    borderColor: '#FF4500', // 진한 빨간색 테두리
+    backgroundColor: '#FF6347',
+    borderColor: '#FF4500',
   },
   statusDefault: {
-    backgroundColor: '#D3D3D3', // 기본 회색 배경
-    borderColor: '#A9A9A9', // 기본 회색 테두리
+    backgroundColor: '#D3D3D3',
+    borderColor: '#A9A9A9',
   },
   travelDateTime: {
     fontSize: 16,

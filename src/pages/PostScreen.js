@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, SafeAreaView } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -7,52 +7,24 @@ import PostList from '../components/PostList';  // 기존 PostList 컴포넌트 
 const PostScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const [selectedCategory, setSelectedCategory] = useState(route.params?.initialCategory || '전체'); // 초기 카테고리 설정
+  const [selectedCategory, setSelectedCategory] = useState(route.params?.initialCategory || '전체');
+
+  useEffect(() => {
+    console.log('Received initialCategory:', route.params?.initialCategory);
+    if (route.params?.initialCategory) {
+      setSelectedCategory(route.params.initialCategory);
+    }
+  }, [route.params?.initialCategory]);
 
   const categories = ['전체', '인기', '답변 대기 중', '답변 완료'];
 
   const posts = [
-    {
-      title: '청년 개발자 분들 질문좀여',
-      writer: '시니어',
-      content: '님들 연봉 어케됨? 저는 시니어라 존나 버는데 님들은 아직도 쥐꼬리 월급받고 사시나요?ㅋㅋㅋㅋ',
-      profileImage: require('../../assets/favicon.png'),
-      status: '답변 대기 중'
-    },
-    {
-      title: '약간 그지같은데',
-      writer: '디자이너가 싫은 개발자',
-      content: '아니 요즘은 디자인도 프론트엔드에서 다 하나봄. 피그마는 장식인가 진짜 빡치네요 ㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠ',
-      profileImage: require('../../assets/favicon.png'),
-      status: '답변 완료'
-    },
-    {
-      title: '싱글벙글 혼자하는 개발 근황',
-      writer: '충삼이',
-      content: '개같이 정신줄을 놓아버림 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅌㅌㅌㅌㅌㅌㅌㅌㅌㅌㄴㄴㄴㄴㄴㄴ',
-      profileImage: require('../../assets/favicon.png'),
-      status: '답변 대기 중'
-    },{
-      title: '리액트 네이티브 초보입니다',
-      writer: '초보개발자',
-      content: '리액트 네이티브에서 상태 관리 어떻게 하면 좋을까요? 여러가지 패턴들이 있던데... 고민입니다.',
-      profileImage: require('../../assets/favicon.png'),
-      status: '답변 대기 중'
-    },
-    {
-      title: '디버깅이 어려워요',
-      writer: '초보개발자',
-      content: '리액트 네이티브에서 디버깅할 때 콘솔로그 외에 다른 방법이 있을까요?',
-      profileImage: require('../../assets/favicon.png'),
-      status: '답변 대기 중'
-
-    },
   ];
-
   const handleProfilePress = () => {
-    // PostScreen의 스택 내에서 ProfileScreen으로 이동
-    navigation.navigate('Profile');
-  };
+    navigation.navigate('MyPageTab', {
+      screen: 'MypageScreen'
+    });
+  };  
 
   const handleNotificationPress = () => {
     navigation.navigate('Notifications');
@@ -117,7 +89,7 @@ const PostScreen = () => {
             ))}
           </View>
 
-          <PostList posts={posts} />
+          <PostList posts={posts.filter(post => post.status === selectedCategory || selectedCategory === '전체')} />
 
         </ScrollView>
 
