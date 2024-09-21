@@ -3,7 +3,7 @@
     "name": "front",
     "slug": "front",
     "version": "1.0.0",
-    "scheme": "com.dev_hana.front",
+    "scheme": "devhana",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
